@@ -1,0 +1,62 @@
+table, td, tr
+{
+    width: fit-content;
+}
+body
+{
+    background-color: black;
+    margin: 0px;
+}
+.formated
+{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    outline: none;
+    border: none;
+    background-color: black;
+    color: white;
+    width: 100%;
+    height: fit-content;
+    text-align: center;
+    font-size: 4vw;
+    cursor: none;
+}
+.centering
+{
+    cursor: none;
+    width: 100%;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.containing
+{
+    cursor: none;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    position: relative;
+}
+.input
+{
+    appearance: none;
+    outline: none;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    border: inset 1px darkgrey;
+}
+.label
+{
+    appearance: none;
+    outline: none;
+    background-color: black;
+    color: white;
+}
