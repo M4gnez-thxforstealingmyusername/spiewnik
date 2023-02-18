@@ -66,3 +66,19 @@ body
 }
 .songdiv
 {display: block;}
+.btn_act
+{
+    outline: none;
+    color: white;
+    border: white 2px solid;
+    border-bottom: none;
+    background-color: black;
+}
+.btn_nact
+{
+    outline: none;
+    color: lightgray;
+    border: lightgrey 2px solid;
+    border-bottom: lightgrey 1px solid;
+    background-color: gray;
+}
