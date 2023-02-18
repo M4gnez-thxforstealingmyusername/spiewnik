@@ -60,3 +60,9 @@ body
     background-color: black;
     color: white;
 }
+.line
+{
+    float: left;
+}
+.songdiv
+{display: block;}

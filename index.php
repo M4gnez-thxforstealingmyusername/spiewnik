@@ -1,117 +1,132 @@
 <html>
     <?php include "head.php" ?>
     <body>
-        <table>
-            <tr>
-                <td>
-                    <label for="wejscie" class="label">Wejście:</label>
-                </td>
-                <td>
-                    <select id="piesn0" name="wejscie" class="input">
-                        <option value="0">brak</option>
-                        <?php
-                            include "conn.php";
-                            include "select.php";
-                        ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="psalm" class="label">Psalm</label>
-                </td>
-                <td id="psalminput">
-                    <textarea name="psalm" id="psalm" class="input"></textarea>
-                </td>
-                <td><button>dzisiejszy</button></td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="ofiarowanie" class="label">Ofiarowanie:</label>
-                </td>
-                <td>
-                    <select id="piesn1" name="ofiarowanie" class="input">
-                        <option value="0">brak</option>
-                        <?php
-                            include "select.php";
-                        ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                        <label for="komunia" class="label">Komunia:</label>
-                </td>
-                <td>
-                    <select id="piesn2" name="komunia" class="input">
-                        <option value="0">brak</option>
-                        <?php
-                            include "select.php";
-                        ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="dziekczynienie" class="label">Dziękczynienie:</label>
-                </td>
-                <td>
-                    <select id="piesn3" name="dziekczynienie" class="input">
-                        <option value="0">brak</option>
-                        <?php
-                            include "select.php";
-                        ?>
-                    </select>
-                </td>
-            </tr>
-                <td>
-                    <label for="zejscie" class="label">Zejście:</label>
-                </td>
-                <td>
-                    <select id="piesn4" name="zejscie" class="input">
-                        <option value="0">brak</option>
-                        <?php
-                            include "select.php";
-                            $conn->close();
-                        ?>
-                    </select>
-                </td>
-            </tr>
-        </table>
 
+        <select id="songlist" name="ofiarowanie" class="input">
+            <option value="0">brak</option>
+            <?php
+                include "conn.php";
+                include "select.php";
+                $conn -> close();
+            ?>
+        </select>
+        <button id="btn_add">+</button>
+        <table id="listedsongs">
+
+        </table>
         <button id="btn_p" onclick="piesni()">KLIK</button>
     </body>
     <script>
+        document.getElementById("btn_add").addEventListener("click", () => {dodajpiesn(document.getElementById("songlist").value)});
+
         $(document).ready(function () {
             $("select").select2();
         });
 
-        document.getElementById("btn_p").addEventListener("click", piesni());
+        document.getElementById("btn_p").addEventListener("click", ()=>piesni());
+
+        var songcount = -1;
+        var songorder = 0;
+
+        var song = [];
+
+        function lista()
+        {
+            const songlist = document.getElementById("listedsongs");
+
+            const container = document.querySelectorAll('.songdiv');
+            container.forEach((obj)=>{
+                obj.remove();
+            });
+
+            var id_giver = 0;
+
+            song.forEach((song_el)=>{
+                const songdiv = document.createElement("tr");
+                songdiv.setAttribute("id", "songdiv" + id_giver)
+                songdiv.setAttribute("class", "songdiv");
+                songlist.appendChild(songdiv);
+
+                const buttondiv = document.createElement("td");
+                buttondiv.setAttribute("id", "buttondiv" + id_giver)
+                buttondiv.setAttribute("class", "line");
+                document.getElementById("songdiv" + id_giver).appendChild(buttondiv);
+
+                const delete_button = document.createElement("button");
+                delete_button.setAttribute("id", "btn_delete_songdiv" + id_giver);
+                delete_button.setAttribute("class", id_giver);
+                document.getElementById("buttondiv" + id_giver).appendChild(delete_button);
+                document.getElementById("btn_delete_songdiv" + id_giver).textContent = "-";
+
+                if(id_giver > 0)
+                {
+                const up_button = document.createElement("button");
+                up_button.setAttribute("id", "btn_up_songdiv" + id_giver);
+                up_button.setAttribute("class", id_giver);
+                document.getElementById("buttondiv" + id_giver).appendChild(up_button);
+                document.getElementById("btn_up_songdiv" + id_giver).textContent = "/\\";
+                }
+
+                if(id_giver < songcount)
+                {
+                const down_button = document.createElement("button");
+                down_button.setAttribute("id", "btn_down_songdiv" + id_giver);
+                down_button.setAttribute("class", id_giver);
+                document.getElementById("buttondiv" + id_giver).appendChild(down_button);
+                document.getElementById("btn_down_songdiv" + id_giver).textContent = "\\/";
+                }
+
+                const listedtitle = document.createElement("td");
+                listedtitle.setAttribute("id", "song" + id_giver);
+                listedtitle.setAttribute("style", "color: white;");
+                document.getElementById("songdiv" + id_giver).appendChild(listedtitle);
+
+                document.getElementById("song" + id_giver).textContent = song_el.title;
+
+                document.getElementById("btn_delete_songdiv" + id_giver).addEventListener("click", function(){
+                    song.splice(event.target.className, 1);
+                    document.getElementById("songdiv"+event.target.className).remove();
+                    songcount--;
+                    lista();
+                });
+
+                if(id_giver > 0)
+                    document.getElementById("btn_up_songdiv" + id_giver).addEventListener("click", function(){
+                        var con = song[event.target.className];
+                        song[event.target.className] = song[event.target.className-1];
+                        song[event.target.className-1] = con;
+                        lista();
+                    });
+
+                if(id_giver < songcount)
+                    document.getElementById("btn_down_songdiv" + id_giver).addEventListener("click", function(){
+                        var con = song[event.target.className];
+                        song[event.target.className] = song[parseInt(event.target.className) + 1];
+                        song[parseInt(event.target.className) + 1] = con;
+                        lista();
+                    });
+
+                id_giver++
+            });
+        }
 
         function piesni()
         {
-            var tabpiesni = [];
-
-            if(document.getElementById("psalm").value)
-                var psalm = document.getElementById("piesn"+i).value;
-
-            for(var i = 0; i < 5; i++)
+            if(song.length == 0)
             {
-                var obj = document.getElementById("piesn"+i);
-                tabpiesni[i] = parseInt(obj.value);
+                return 0
             }
 
-            var lnt = 4;
+            var tabpiesni = []
 
-            for(var i = 0; i <= lnt; i++)
-            {
-                if(tabpiesni[i]==0)
-                {
-                    tabpiesni.splice(i,1);
-                    i--;
-                    lnt--;
-                }
-            }
+            song.forEach((song_el)=>{
+                tabpiesni[tabpiesni.length] = song_el.id;
+            });
+
+            console.log(tabpiesni)
+
+            // if(document.getElementById("psalm").value)
+            //     var psalm = document.getElementById("piesn"+i).value;
 
             var idlist;
             if(tabpiesni.length > 0)
@@ -133,11 +148,12 @@
             if(tabpiesni.length > 0)
                 $.post("teksty.php", {
                         "id_p": idlist,
+                        "ret": 0
                     }, function(tekstpiesni, status) {
                         var teksty = JSON.parse(tekstpiesni);
                         prezentacja(teksty);
                     })
-        }
+        };
 
         function prezentacja(tekst)
         {
@@ -162,7 +178,7 @@
             for(var i = 0; i < teksty.length; i++){
                 teksty[i] = teksty[i].replaceAll("\\n","\n")
                 document.write(teksty[i])
-            debugger;}
+            ;}
 
             if(document.body.innerHTML)
                 document.body.innerHTML = "<head><link rel='stylesheet' href='style.css'></head><body></body>";
@@ -198,6 +214,45 @@
                     document.getElementById("txt").textContent = teksty[slide];
                 }
             });
+
+            document.body.addEventListener("click", function(){
+                slide++;
+                document.getElementById("txt").textContent = teksty[slide];
+            });
+
+            document.body.addEventListener('contextmenu', function(e) {
+                slide--;
+                document.getElementById("txt").textContent = teksty[slide];
+                e.preventDefault()
+                return false;
+            }, false);
         };
+
+        function dodajpiesn(id)
+        {
+            if(id == 0)
+            {}
+            else
+            {
+                var title;
+
+                $.post("teksty.php", {
+                            "id_p": id,
+                            "ret": 1
+                }, function(tekstpiesni, status) {
+                    title = tekstpiesni;
+                    song[songcount] =
+                    {
+                        id: id,
+                        title: title,
+                        obj_id: songcount
+                    };
+
+                    lista();
+                });
+                songcount++;
+                songorder++;
+            };
+        }
     </script>
 </html>
