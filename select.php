@@ -1,5 +1,5 @@
 <?php
-    $sql = "SELECT id_piesn, tytul FROM piesn";
+    $sql = "SELECT id_piesn, tytul FROM piesn ORDER BY tytul ASC";
     $result = mysqli_query($conn, $sql);
 
     if ($result !== false && $result->num_rows > 0)

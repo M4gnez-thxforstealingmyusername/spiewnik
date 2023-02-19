@@ -162,7 +162,7 @@
             lp = 0;
 
             for(var i = 0; i < tekst.length; i++)
-                tekstprep[i] = tekst[i].split("\\n\\n");
+                tekstprep[i] = tekst[i].split("#");
 
             for(var i = 0; i < tekstprep.length; i++)
             {
