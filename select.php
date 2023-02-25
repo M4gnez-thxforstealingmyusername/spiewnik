@@ -1,4 +1,5 @@
 <?php
+    include "conn.php";
     $sql = "SELECT id_piesn, tytul FROM piesn ORDER BY tytul ASC";
     $result = mysqli_query($conn, $sql);
 
@@ -13,4 +14,6 @@
     {
         echo "0 results";
     }
+
+    $conn -> close();
 ?>

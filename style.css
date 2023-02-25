@@ -82,3 +82,13 @@ body
     border-bottom: lightgrey 1px solid;
     background-color: gray;
 }
+.edit_pre
+{
+    height: fit-content;
+    color: white;
+}
+
+#pre_edit_td
+{
+    vertical-align: top;
+}

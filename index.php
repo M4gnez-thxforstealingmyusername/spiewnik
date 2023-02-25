@@ -3,11 +3,9 @@
     <body>
 
         <select id="songlist" name="ofiarowanie" class="input">
-            <option value="0">brak</option>
+            <option value="0">-</option>
             <?php
-                include "conn.php";
                 include "select.php";
-                $conn -> close();
             ?>
         </select>
         <button id="btn_add">+</button>
