@@ -196,7 +196,7 @@
             pretxt.setAttribute("class", "formated");
             document.getElementById("cendiv").appendChild(pretxt);
 
-            var slide = 0;
+            var slide = -1;
             document.getElementById("txt").textContent = teksty[slide];
 
 

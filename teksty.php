@@ -64,19 +64,21 @@
     }
     else if($_POST["ret"] == 3)
     {
-        $sql = "SELECT tekst FROM piesn where id_piesn = ". $_POST["id_p"];
+        $aResult = array();
+        $sql = "SELECT tekst, tytul FROM piesn where id_piesn = ". $_POST["id_p"];
             $result = mysqli_query($conn, $sql);
 
             if ($result !== false && $result->num_rows > 0)
             {
                 while($row = $result->fetch_assoc())
                 {
-                    $aResult = $row["tekst"];
+                    $aResult[0] = $row["tekst"];
+                    $aResult[1] = $row["tytul"];
                 }
             }
             else
-                $aResult = "Nie znaleziono tekstu";
+                $aResult[0] = "Nie znaleziono tekstu";
 
-            echo $aResult;
+            echo json_encode($aResult);
     }
 ?>

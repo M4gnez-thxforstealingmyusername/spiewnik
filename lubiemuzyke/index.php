@@ -5,6 +5,7 @@
     {
         include "../conn.php";
         $tytul = $_POST["tytul"];
+        $tekst = $_POST["text"];
 
         $sql = "INSERT INTO piesn VALUES (default, '".$tytul."', '".$tekst."')";
         $result = mysqli_query($conn, $sql);
@@ -15,9 +16,10 @@
     {
         include "../conn.php";
         $text = $_POST["text"];
+        $tytul = $_POST["tytul"];
         $id = $_POST["id_p"];
 
-        $sqlu = "UPDATE piesn SET tekst = '".$text."' WHERE id_piesn = ".$id;
+        $sqlu = "UPDATE piesn SET tekst = '".$text."', tytul = '".$tytul."' WHERE id_piesn = ".$id;
         mysqli_query($conn, $sqlu);
     }
 
@@ -178,6 +180,13 @@
 
                 form_operations.appendChild(br1);
 
+                const edit_tytul = document.createElement("input");
+                edit_tytul.setAttribute("type", "text");
+                edit_tytul.setAttribute("name", "tytul");
+                edit_tytul.setAttribute("id", "edit_tytul");
+                edit_tytul.setAttribute("class", "input");
+                form_operations.appendChild(edit_tytul);
+
                 const edit_table = document.createElement("table")
                 edit_table.setAttribute("id", "edit_table")
                 const edit_tr = document.createElement("tr")
@@ -220,8 +229,10 @@
                             "id_p": document.getElementById("edited").value,
                             "ret": 3
                     }, function(tekstpiesni, status) {
-                        document.getElementById("old_text").innerText = tekstpiesni;
-                        console.log(document.getElementById("old_text").offsetHeight);
+                        console.log(typeof(tekstpiesni))
+                        tekstpiesni = JSON.parse(tekstpiesni);
+                        document.getElementById("old_text").innerText = tekstpiesni[0];
+                        document.getElementById("edit_tytul").value = tekstpiesni[1];
                         document.getElementById("edit_textarea").style.height = document.getElementById("old_text").offsetHeight+30;
                     });
                 });
