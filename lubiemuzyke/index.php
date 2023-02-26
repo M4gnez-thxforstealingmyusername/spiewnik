@@ -23,6 +23,15 @@
         mysqli_query($conn, $sqlu);
     }
 
+    function usun()
+    {
+        include "../conn.php";
+        $id = $_POST["id_p"];
+
+        $sqlu = "DELETE FROM piesn WHERE id_piesn = ".$id;
+        mysqli_query($conn, $sqlu);
+    }
+
     if(isset($_POST['dodaj']))
     {
         dodaj();
@@ -32,6 +41,12 @@
     if(isset($_POST['edit']))
     {
         edytuj();
+        include "head.php";
+    }
+
+    if(isset($_POST['usun']))
+    {
+        usun();
         include "head.php";
     }
 ?>
@@ -142,7 +157,64 @@
                 form_operations.appendChild(submit);
             break;
             case 1:
+                const usun_select = document.createElement("select");
+                usun_select.setAttribute("id", "edited")
+                usun_select.setAttribute("name", "id_p")
+                usun_select.setAttribute("class", "input");
+                form_operations.appendChild(usun_select);
 
+                $.post("../teksty.php", {
+                    "ret": 2
+                }, function(tekstpiesni, status) {
+                    var options = JSON.parse(tekstpiesni);
+
+                    console.log(options);
+
+                    for(var i = 0; i < options[0].length; i++)
+                    {
+                        const option = document.createElement("option");
+                        option.setAttribute("value", options[0][i]);
+                        option.textContent = options[1][i];
+                        document.getElementById("edited").appendChild(option);
+
+                        $(document).ready(function () {
+                            $("select").select2();
+                        });
+                    }
+                });
+
+                const usun_button = document.createElement("button");
+                usun_button.setAttribute("id", "usun_button");
+                usun_button.setAttribute("class", "input");
+                usun_button.setAttribute("type", "button");
+                usun_button.textContent = "Pokaż tekst";
+                form_operations.appendChild(usun_button);
+
+                form_operations.appendChild(br1);
+
+                const usun_pre = document.createElement("pre");
+                usun_pre.setAttribute("id", "usun_pre");
+                usun_pre.setAttribute("class", "edit_pre remove");
+                form_operations.appendChild(usun_pre);
+
+                form_operations.appendChild(br2);
+
+                document.getElementById("usun_button").addEventListener("click", function(){
+                    $.post("../teksty.php", {
+                            "id_p": document.getElementById("edited").value,
+                            "ret": 3
+                    }, function(tekstpiesni, status) {
+                        console.log(typeof(tekstpiesni))
+                        tekstpiesni = JSON.parse(tekstpiesni);
+                        document.getElementById("usun_pre").innerText = tekstpiesni[0];
+                    });
+                });
+
+                submit.setAttribute("type", "submit");
+                submit.setAttribute("name", "usun");
+                submit.setAttribute("id", "usun_submit");
+                submit.setAttribute("class", "input");
+                form_operations.appendChild(submit);
             break;
             case 2:
                 const select = document.createElement("select");
